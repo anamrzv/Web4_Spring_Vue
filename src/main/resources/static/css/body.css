@@ -1,0 +1,115 @@
+body {
+    background: #d6eaf8;
+    margin: 0;
+    font-family: "Century Gothic", sans-serif;
+}
+
+#body-table {
+    width: 100%;
+    cellpadding: 0;
+    cellspacing: 0;
+}
+
+.graph {
+    display: flex;
+    flex-direction: row;
+    margin: 25px;
+}
+
+#graph_pic {
+    alignment: center;
+}
+
+.choose-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 20px;
+    border: 2px groove #00538b;
+    margin: 50px 300px 10px;
+    background-color: #c6d9e8;
+    box-shadow: 0 0 30px -3px #00538b;
+}
+
+.table-area {
+    display: flex;
+    justify-content: center;
+}
+
+div[class="checkbox-area"] {
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #a4bdd2;
+}
+
+#coordinates-form > div {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+
+}
+
+#main-table {
+    border-collapse: collapse;
+    border: 2px groove darkred;
+    width: 600px;
+    color: indianred;
+}
+
+#main-table th {
+    background-color: bisque;
+    border: 2px groove darkred;
+    font-weight: lighter;
+}
+
+#main-table td {
+    background-color: darksalmon;
+    border: 2px groove darkred;
+}
+
+.gradient-button {
+    color: white;
+    display: inline-block;
+    padding: 10px 10px;
+    margin: 10px 20px;
+    border-radius: 45px;
+    font-family: "Century Gothic", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: linear-gradient(to right, #9EEFE1 0%, #4830F0 51%, #9EEFE1 100%);
+    background-size: 200% auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+    transition: .5s;
+}
+
+.gradient-button:hover {
+    background-position: right center;
+}
+
+.buttons-area {
+    flex-direction: row;
+}
+
+.clock-area {
+    margin: auto;
+    max-width: 500px;
+    min-width: 100px;
+    background: white;
+    text-align: center;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 32px;
+    padding: 10px;
+    font-weight: bold;
+    border-top: 10px solid midnightblue;
+    margin-top: 100px;
+}
+
+#date {
+    display: block;
+    font-weight: normal;
+    font-size: 18px;
+}

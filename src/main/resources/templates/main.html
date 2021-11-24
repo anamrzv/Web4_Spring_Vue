@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Ana's Web</title>
+    <link rel="stylesheet" type="text/css" href="/css/body.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/slider.css"/>
+    <script src="/js/validate.js"></script>
+    <script src="/js/graph.js"></script>
+</head>
+
+<body>
+<table id="body-table">
+
+    <tr>
+        <th class="header">
+            <div>
+                <p>Морозова Анастасия Александровна P3230</p>
+                <p>Вариант 5547</p>
+            </div>
+        </th>
+    </tr>
+
+    <tr class="body">
+        <th class="choose-area">
+            <div class="graph">
+                <link rel="import" href="graph.html">
+            </div>
+
+            <form id="hidden-form" style="display: none">
+                <input type="text" id="pointX"/>
+                <input type="text" id="pointY"/>
+                <input type="text" id="pointR"/>
+                <button type="submit" id="hidden-btn"/>
+            </form>
+
+            <div>
+                <form id="coordinates-form">
+                    <div class="checkbox-area">
+                        <p>Выберите X:</p>
+                        <div>
+
+                        </div>
+
+                        <p>Выберите Y (-5;5):</p>
+                        <div>
+                        </div>
+
+                        <p>Выберите R:</p>
+                        <div>
+                        </div>
+
+                        <div class="buttons-area">
+                            <button type="submit" id="function-btn" class="gradient-button" onclick="validate()">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </th>
+    </tr>
+
+    <tr>
+        <th>
+            <div>
+                <button type="button" class="gradient-button">На главную</button>
+            </div>
+            <div class="table-area">
+                <table id="main-table">
+                    <caption>История выполнений</caption>
+                    <tr>
+                        <th class="col">X</th>
+                        <th class="col">Y</th>
+                        <th class="col">R</th>
+                        <th class="col">Текущее время</th>
+                        <th class="col">Результат</th>
+                    </tr>
+                </table>
+            </div>
+        </th>
+    </tr>
+
+</table>
+</body>
+</html>
