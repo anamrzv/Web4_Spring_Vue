@@ -51,6 +51,6 @@ export default {
 </script>
 
 <style>
-@import "../assets/css/header.css";
-@import "../assets/css/body.css";
+@import "../../public/header.css";
+@import "../../public/body.css";
 </style>

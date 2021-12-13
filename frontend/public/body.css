@@ -1,5 +1,5 @@
 body {
-    background: #d6eaf8;
+    background: #9D8CA1;
     margin: 0;
     font-family: "Century Gothic", sans-serif;
 }
@@ -29,19 +29,15 @@ body {
     margin: 25px;
 }
 
-#graph_pic {
-    alignment: center;
-}
-
 .choose-area {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     padding: 20px;
-    border: 2px groove #00538b;
+    border: 2px groove #524C6B;
     margin: 50px 300px 10px;
-    background-color: #c6d9e8;
-    box-shadow: 0 0 30px -3px #00538b;
+    background-color: #B0ABC4;
+    box-shadow: 0 0 30px -3px #787099;
 }
 
 .table-area {
@@ -51,12 +47,23 @@ body {
 
 div[class="checkbox-area"] {
     width: 400px;
-    height: 300px;
+    height: 350px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #a4bdd2;
+    background-color: #9993B2;
+}
+
+.ordinary-btn {
+    color: #9D8CA1;
+    display: inline-block;
+    border-radius: 45px;
+    font-family: "Century Gothic", sans-serif;
+    text-transform: uppercase;
+    color: black;
+    margin: auto 30px;
+    width: 40px;
 }
 
 #coordinates-form > div {
@@ -67,20 +74,20 @@ div[class="checkbox-area"] {
 
 #main-table {
     border-collapse: collapse;
-    border: 2px groove darkred;
+    border: 2px groove #4C4248;
     width: 600px;
-    color: indianred;
+    color: #4C4248;
 }
 
 #main-table th {
-    background-color: bisque;
-    border: 2px groove darkred;
+    background-color: #81717A;
+    border: 2px groove #4C4248;
     font-weight: lighter;
 }
 
 #main-table td {
-    background-color: darksalmon;
-    border: 2px groove darkred;
+    background-color: #95878f;
+    border: 2px groove #4C4248;
 }
 
 .gradient-button {
@@ -92,7 +99,7 @@ div[class="checkbox-area"] {
     font-family: "Century Gothic", sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    background-image: linear-gradient(to right, #9EEFE1 0%, #4830F0 51%, #9EEFE1 100%);
+    background-image: linear-gradient(to right, #A99AAC 0%, #6D5F67 51%, #A99AAC 100%);
     background-size: 200% auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, .1);
     transition: .5s;
@@ -102,26 +109,36 @@ div[class="checkbox-area"] {
     background-position: right center;
 }
 
-.buttons-area {
-    flex-direction: row;
+.ordinary-btn, .ordinary-btn-R {
+    background-color: #b8b4b8;
+    display: inline-block;
+    border-radius: 45px;
+    font-family: "Century Gothic", sans-serif;
+    text-transform: uppercase;
+    color: black;
+    margin: auto 30px;
+    width: 40px;
 }
 
-.clock-area {
-    margin: auto;
-    max-width: 500px;
-    min-width: 100px;
-    background: white;
-    text-align: center;
-    font-family: 'Titillium Web', sans-serif;
-    font-size: 32px;
-    padding: 10px;
-    font-weight: bold;
-    border-top: 10px solid midnightblue;
-    margin-top: 100px;
+.ordinary-btn-selected, .ordinary-btn-selected-R {
+    background-color: #6f5976;
+    display: inline-block;
+    border-radius: 45px;
+    font-family: "Century Gothic", sans-serif;
+    text-transform: uppercase;
+    color: black;
+    margin: auto 30px;
+    width: 40px;
 }
 
-#date {
-    display: block;
-    font-weight: normal;
-    font-size: 18px;
+#graph_pic {
+    margin-top: 35px;
+    justify-content: center;
+}
+
+caption {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-family: "Century Gothic", sans-serif;
+    text-transform: uppercase;
 }

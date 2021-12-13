@@ -48,19 +48,19 @@
             <text fill="black" x="160" y="15">Y</text>
 
             <polygon fill="black"
-                     fill-opacity="0.5"
+                     fill-opacity="0.3"
                      stroke="black"
-                     points="50,150 150,150 150,50 50,50"/>
+                     points="50,150 150,150 150,200 50,200"/>
 
             <path fill="black"
-                  fill-opacity="0.5"
+                  fill-opacity="0.3"
                   stroke="black"
-                  d="M 100 150 A 100 100, 90, 0, 0, 150 200 L 150 150"/>
+                  d="M 150 200 A 50 50, 90, 0, 0, 200 150 L 150 150"/>
 
             <polygon fill="black"
-                     fill-opacity="0.5"
+                     fill-opacity="0.3"
                      stroke="black"
-                     points="150,150 200,150 150,200"/>
+                     points="50,150 150,150 150,50"/>
           </svg>
         </div>
 
@@ -148,14 +148,23 @@
         </div>
         <div class="table-area">
           <table id="main-table">
-            <caption>История выполнений</caption>
-            <tr>
+            <caption>ИСТОРИЯ ВЫПОЛНЕНИЙ</caption>
+            <thead>
               <th class="col">X</th>
               <th class="col">Y</th>
               <th class="col">R</th>
               <th class="col">Текущее время</th>
               <th class="col">Результат</th>
+            </thead>
+            <tbody>
+            <tr v-for="point in points" v-bind:key="point.id">
+              <td>{{ point.x }}</td>
+              <td>{{ point.y }}</td>
+              <td>{{ point.r }}</td>
+              <td>{{ point.time }}</td>
+              <td>{{ point.result }}</td>
             </tr>
+            </tbody>
           </table>
         </div>
       </th>
@@ -165,6 +174,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "main",
   data() {
@@ -174,7 +185,7 @@ export default {
       r: "3",
       xGraph: "",
       yGraph: "",
-      dots: new Array(0)
+      points: new Array(0)
     }
   },
   watch: { //для изменения картинки потом вставить
@@ -183,6 +194,27 @@ export default {
     }
   },
   methods: {
+    addPoints() {
+      console.log(typeof document.getElementById('pointX').value)
+      axios.post('http://localhost:8083/api/points/main', {
+        x: document.getElementById('pointX').value,
+        y: document.getElementById('yField').value.trim(),
+        r: document.getElementById('pointR').value
+      }).then(() => {
+        this.getPoints();
+      }, () => {
+        alert("Точку не удалось добавить");
+      });
+      alert("Отправлено!");
+    },
+
+    getPoints() {
+      axios.get('http://localhost:8083/api/points/main')
+          .then((response) => {
+            this.points = response.data;
+          });
+    },
+
     rememberX(value1) {
       document.getElementById('pointX').value = value1;
     },
@@ -197,12 +229,9 @@ export default {
         if (y >= 5 || y <= -5) yText.setCustomValidity("Число вне допустимого диапазона");
         else {
           yText.setCustomValidity("");
-          this.addDots();
+          this.addPoints();
         }
       } else yText.setCustomValidity("Некорректный вид числа");
-    },
-    addDots() {
-      alert("Отправлено!");
     },
     paintButtons(id) {
       let selected = document.querySelectorAll(".ordinary-btn-selected");
@@ -228,40 +257,9 @@ export default {
       document.getElementById(id).classList.toggle("ordinary-btn-R"); //убрали обычный
       document.getElementById(id).classList.toggle("ordinary-btn-selected-R"); //добавили нажатый
     }
+  },
+  mounted() {
+    this.getPoints();
   }
 }
 </script>
-
-<style>
-@import "../assets/css/header.css";
-@import "../assets/css/body.css";
-
-.ordinary-btn, .ordinary-btn-R {
-  background-color: #b8b4b8;
-  display: inline-block;
-  border-radius: 45px;
-  font-family: "Century Gothic", sans-serif;
-  text-transform: uppercase;
-  color: black;
-  margin: auto 30px;
-  width: 40px;
-}
-
-.ordinary-btn-selected, .ordinary-btn-selected-R {
-  background-color: #6f5976;
-  display: inline-block;
-  border-radius: 45px;
-  font-family: "Century Gothic", sans-serif;
-  text-transform: uppercase;
-  color: black;
-  margin: auto 30px;
-  width: 40px;
-}
-
-#graph_pic {
-  margin-top: 35px;
-  justify-content: center;
-}
-
-
-</style>
