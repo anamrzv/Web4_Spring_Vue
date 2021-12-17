@@ -13,7 +13,7 @@
     <tr class="body">
       <th class="choose-area">
         <div id="graph">
-          <svg id="graph_pic" height="320" width="320" xmlns="http://www.w3.org/2000/svg">
+          <svg id="graph_pic" height="300" width="300" xmlns="http://www.w3.org/2000/svg" @click="addPointFromGraph">
 
             <line stroke="black" x1="0" y1="150" x2="300" y2="150"/>
             <line stroke="black" x1="150" y1="0" x2="150" y2="300"/>
@@ -145,16 +145,19 @@
       <th>
         <div>
           <button type="button" class="gradient-button">На главную</button>
+          <button type="button" class="gradient-button" @click="deletePoints">Удалить все точки</button>
         </div>
         <div class="table-area">
           <table id="main-table">
             <caption>ИСТОРИЯ ВЫПОЛНЕНИЙ</caption>
             <thead>
+            <tr>
               <th class="col">X</th>
               <th class="col">Y</th>
               <th class="col">R</th>
               <th class="col">Текущее время</th>
               <th class="col">Результат</th>
+            </tr>
             </thead>
             <tbody>
             <tr v-for="point in points" v-bind:key="point.id">
@@ -185,7 +188,7 @@ export default {
       r: "3",
       xGraph: "",
       yGraph: "",
-      points: new Array(0)
+      points: new Array(0),
     }
   },
   watch: { //для изменения картинки потом вставить
@@ -195,31 +198,97 @@ export default {
   },
   methods: {
     addPoints() {
-      console.log(typeof document.getElementById('pointX').value)
       axios.post('http://localhost:8083/api/points/main', {
         x: document.getElementById('pointX').value,
         y: document.getElementById('yField').value.trim(),
         r: document.getElementById('pointR').value
       }).then(() => {
         this.getPoints();
+        this.drawPoints();
       }, () => {
         alert("Точку не удалось добавить");
       });
-      alert("Отправлено!");
     },
-
     getPoints() {
       axios.get('http://localhost:8083/api/points/main')
           .then((response) => {
             this.points = response.data;
+            this.drawPoints();
           });
     },
+    deletePoints() {
+      axios.delete('http://localhost:8083/api/points/main')
+          .then(() => {
+            this.getPoints();
+            alert("Точки удалены")
+          }, () => {
+            alert("Не удалось удалить точки")
+          })
+    },
+
+    drawPoints() {
+      const svgSize = 300;
+      let r = parseFloat(this.r);
+      let svg = document.getElementById("graph_pic")
+      let oldDots = document.querySelectorAll("circle");
+      oldDots.forEach(oldDot => oldDot.parentNode.removeChild(oldDot));
+      console.log(this.points.length);
+      console.log(this.points)
+      if (this.points.length !== 0) {
+        this.points.forEach(point => {
+          let newPoint = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          newPoint.setAttribute("id", "target-dot");
+          newPoint.setAttribute("r", "3.5");
+          newPoint.setAttribute("cx", `${(point.x / 3) * 100 + svgSize / 2}`);
+          newPoint.setAttribute("cy", `${svgSize / 2 - (point.y / 3) * 100}`);
+          if (point.r === r) {
+            newPoint.setAttribute("fill", point.result === "Попадание" ? "green" : "red");
+            newPoint.setAttribute("r", "4.5");
+          } else {
+            newPoint.setAttribute("fill", "black");
+            newPoint.setAttribute("opacity", "0.5");
+          }
+          svg.appendChild(newPoint);
+        })
+      }
+    },
+    addPointFromGraph() {
+      let position = getMousePosition(document.getElementById("graph_pic"), event);
+      this.xGraph = ((position.x - 150) / 100 * this.r).toFixed(2);
+      this.yGraph = ((this.r * (150 - position.y)) / 100).toFixed(2);
+      console.log(position.x, position.y);
+      console.log(this.xGraph, this.yGraph);
+      if (this.r >= 1 && this.r <= 3) {
+        axios.post('http://localhost:8083/api/points/main', {
+          x: this.xGraph,
+          y: this.yGraph,
+          r: this.r
+        }).then(() => {
+          this.getPoints();
+          this.drawPoints();
+        }, () => {
+          alert("Точку не удалось добавить");
+        });
+      } else {
+        alert("Проверьте значение R");
+      }
+
+      function getMousePosition(element, event) {
+        let rect = element.getBoundingClientRect();
+        return {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top
+        };
+      }
+    },
+
 
     rememberX(value1) {
       document.getElementById('pointX').value = value1;
     },
     rememberR(value1) {
       document.getElementById('pointR').value = value1;
+      this.r = value1;
     },
     validateInput() {
       let y;
@@ -233,6 +302,8 @@ export default {
         }
       } else yText.setCustomValidity("Некорректный вид числа");
     },
+
+
     paintButtons(id) {
       let selected = document.querySelectorAll(".ordinary-btn-selected");
       if (selected !== null) {
@@ -260,6 +331,7 @@ export default {
   },
   mounted() {
     this.getPoints();
+    this.drawPoints();
   }
 }
 </script>

@@ -22,7 +22,7 @@ public class MainController {
 
     @GetMapping(value = "/main",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Point>> getPoints() {
+    private ResponseEntity<List<Point>> getPoints() {
         System.out.println(pointRepository.findAll());
         return ResponseEntity.ok().body(pointRepository.findAll());
     }
@@ -30,7 +30,7 @@ public class MainController {
     @PostMapping(value = "/main",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Point> addNewPoint(@RequestBody PointRequest point) {
+    private ResponseEntity<Point> addNewPoint(@RequestBody PointRequest point) {
         float x1 = Float.valueOf(point.getX());
         float y1 = Float.valueOf(point.getY());
         float r1 = Float.valueOf(point.getR());
@@ -42,6 +42,13 @@ public class MainController {
         else answer = "Промах";
         Point savedPoint = pointRepository.save(new Point(x1, y1, r1, answer, time));
         System.out.println(savedPoint + " saved into DB");
+        return ResponseEntity.ok().body(null);
+    }
+
+    @DeleteMapping(value = "/main",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    private ResponseEntity<String> deletePoints(){
+        pointRepository.deleteAll();
         return ResponseEntity.ok().body(null);
     }
 
