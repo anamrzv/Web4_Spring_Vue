@@ -47,17 +47,17 @@
             <text fill="black" x="285" y="140">X</text>
             <text fill="black" x="160" y="15">Y</text>
 
-            <polygon fill="black"
+            <polygon id="rectangle" fill="black"
                      fill-opacity="0.3"
                      stroke="black"
                      points="50,150 150,150 150,200 50,200"/>
 
-            <path fill="black"
+            <path id="circle" fill="black"
                   fill-opacity="0.3"
                   stroke="black"
                   d="M 150 200 A 50 50, 90, 0, 0, 200 150 L 150 150"/>
 
-            <polygon fill="black"
+            <polygon id="triangle" fill="black"
                      fill-opacity="0.3"
                      stroke="black"
                      points="50,150 150,150 150,50"/>
@@ -191,9 +191,19 @@ export default {
       points: new Array(0),
     }
   },
+
+
   watch: { //для изменения картинки потом вставить
     r() {
-
+      let r = parseFloat(this.r);
+      let circle = document.getElementById("circle");
+      let rectangle = document.getElementById("rectangle");
+      let triangle = document.getElementById("triangle");
+      circle.setAttribute("d", `M 150 ${170 + 10 * r} A 50 50, 90, 0, 0, ${170 + 10 * r} 150 L 150 150 Z`);
+      triangle.setAttribute("points", `${80 - 10 * r},150 150,150 150,${80 - 10 * r}`);
+      rectangle.setAttribute("points", `${80 - 10 * r},150 150,150 150,${170+10*r} ${80 - 10 * r},${170+10*r} `);
+      this.drawPoints();
+      //50,150 150,150 150,200 50,200
     }
   },
   methods: {
