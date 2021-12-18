@@ -192,8 +192,7 @@ export default {
     }
   },
 
-
-  watch: { //для изменения картинки потом вставить
+  watch: {
     r() {
       let r = parseFloat(this.r);
       let circle = document.getElementById("circle");
@@ -201,9 +200,8 @@ export default {
       let triangle = document.getElementById("triangle");
       circle.setAttribute("d", `M 150 ${170 + 10 * r} A 50 50, 90, 0, 0, ${170 + 10 * r} 150 L 150 150 Z`);
       triangle.setAttribute("points", `${80 - 10 * r},150 150,150 150,${80 - 10 * r}`);
-      rectangle.setAttribute("points", `${80 - 10 * r},150 150,150 150,${170+10*r} ${80 - 10 * r},${170+10*r} `);
+      rectangle.setAttribute("points", `${80 - 10 * r},150 150,150 150,${170 + 10 * r} ${80 - 10 * r},${170 + 10 * r} `);
       this.drawPoints();
-      //50,150 150,150 150,200 50,200
     }
   },
   methods: {

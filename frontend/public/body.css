@@ -8,19 +8,7 @@ body {
     width: 100%;
     cellpadding: 0;
     cellspacing: 0;
-}
-
-.login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 230px 300px;
-}
-
-.login > input, button {
-    margin: 5px;
-    padding: 5px 5px;
+    overflow: hidden;
 }
 
 .graph {

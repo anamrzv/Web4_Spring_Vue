@@ -8,43 +8,76 @@
       </div>
     </div>
 
-    <div>
-      <form id="login">
-        <div class="login">
-          <input type="text" name="username" v-model="input.username" placeholder="Username">
-          <input type="password" v-model="input.password" placeholder="Password">
-          <button type="submit" class="gradient-button" v-on:click="login()">Войти</button>
+    <div class="container">
+      <div class="screen">
+        <div class="screen__content">
+          <form class="login">
+            <div class="login__field">
+              <i class="login__icon fas fa-user"></i>
+              <input type="text" class="login__input" id="loginInput" required placeholder="Логин" v-model.trim="login">
+            </div>
+            <div class="login__field">
+              <i class="login__icon fas fa-lock"></i>
+              <input type="password" class="login__input" id="passwordInput" required placeholder="Пароль"
+                     v-model.trim="password">
+            </div>
+            <a id="forError" style="font-size: 10px; font-style: oblique; color: #4C489D"></a>
+            <button class="button login__submit" @click="loging">
+              <span class="button__text">войти</span>
+              <i class="button__icon fas fa-chevron-right"></i>
+            </button>
+          </form>
+          <div class="social-login">
+            <a href="/" @click="register">регистрация</a>
+          </div>
         </div>
-      </form>
+        <div class="screen__background">
+          <span class="screen__background__shape screen__background__shape4"></span>
+          <span class="screen__background__shape screen__background__shape3"></span>
+          <span class="screen__background__shape screen__background__shape2"></span>
+          <span class="screen__background__shape screen__background__shape1"></span>
+        </div>
+      </div>
     </div>
 
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'Login',
-  data() { //this page has a login form so we need to initialize the variables that will bind it
+  data() {
     return {
-      input: {
-        username: "",
-        password: ""
-      }
+      login: "",
+      password: ""
     }
   },
   methods: {
-    login() {
-      if(this.input.username != "" && this.input.password != "") {
-        if(this.input.username == "ana" && this.input.password == "123") {
-          this.$emit("authenticated", true);
-        } else {
-          alert("The username and / or password is incorrect");
-        }
-      } else {
-        //window.location.href = 'main';
-        this.$router.push("/main");
-        alert("A username and password must be present");
-      }
+    loging(e) {
+      e.preventDefault();
+      this.$router.push({name: 'main'});
+      axios.post('http://localhost:8083/api/user/auth', {
+        login: this.login,
+        password: this.password
+      }).then(response => {
+        localStorage.setItem("jwt", response.data);
+        this.$router.push({name: 'main'});
+      }).catch(error => {
+        document.getElementById("forError").innerText=error.response.data;
+      })
+    },
+    register() {
+
+    },
+    AxiosErrorHandler(errorText) {
+      this.$notify({
+        group: 'error',
+        title: 'Error',
+        text: errorText,
+        type: 'error'
+      })
     }
   }
 }
@@ -53,4 +86,5 @@ export default {
 <style>
 @import "../../public/header.css";
 @import "../../public/body.css";
+@import "../../public/login.css";
 </style>
