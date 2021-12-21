@@ -11,14 +11,17 @@
     <div class="errors">
       <h1>Ошибка {{errorCode}}:</h1>
       <h2>{{errorMsg}}</h2>
+      <button class="gradient-button" @click="goHome">
+        Войти
+      </button>
     </div>
 
   </div>
 </template>
 
 <style>
-@import "../../public/header.css";
-@import "../../public/body.css";
+@import "../assets/header.css";
+@import "../assets/body.css";
 
 .errors{
   color: #000000;
@@ -33,6 +36,11 @@ export default {
   props: {
     errorCode: String,
     errorMsg: String
+  },
+  methods: {
+    goHome(){
+      this.$router.push({name:"auth-page"})
+    }
   }
 }
 </script>

@@ -1,8 +1,13 @@
 package application.domain;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Data
@@ -18,17 +23,42 @@ public class Point {
     private Float y;
     @Column(name = "r")
     private Float r;
-    @Column
+    @Column(name = "result")
     private String result;
-    @Column
-    private String time;
+    @Column(name = "username")
+    private String user;
+    @Column(name = "ttl")
+    private LocalTime ttl;
+    @Column(name = "creation")
+    private LocalDateTime creation;
+    @Column(name = "death")
+    private LocalDateTime death;
+    @Column(name = "creation_string")
+    private String creationString;
+    @Column(name = "death_string")
+    private String deathString;
 
-    public Point(float x, float y, float r, String answer, String time){
-        this.x=x;
-        this.y=y;
-        this.r=r;
-        this.result=answer;
-        this.time=time;
+
+    public Point(float x, float y, float r, String answer, LocalDateTime creation, String ttl, String user) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.result = answer;
+        this.creation = creation;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        this.ttl = LocalTime.parse(ttl, formatter);
+        this.death = creation.plusMinutes(this.ttl.getMinute()).plusHours(this.ttl.getHour());
+        this.user = user;
+        this.creationString = getDateTimeAsString(creation);
+        this.deathString = getDateTimeAsString(death);
     }
+
+    @JsonIgnore
+    public String getDateTimeAsString(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return date.format(formatter);
+    }
+
+
 }
 

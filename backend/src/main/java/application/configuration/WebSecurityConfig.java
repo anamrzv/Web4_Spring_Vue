@@ -26,10 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/points").permitAll() //для стартовой страницы разрешаем доступ всем пользователям
+                    .antMatchers("/api/points").permitAll()
                     .antMatchers("/api/points/*").permitAll()
                     .antMatchers("/api/user").permitAll()
                     .antMatchers("/api/user/*").permitAll()
+                    .antMatchers("/error").permitAll()
+                    .antMatchers("/auth").permitAll()
                     .anyRequest().authenticated() //требуем авторизацию
                 .and()
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -20,7 +20,7 @@ public class UserService {
 
     @Transactional
     public User saveUser(String login, String password){
-        byte[] salt = new byte[16];
+        byte[] salt = new byte[6];
         RANDOM.nextBytes(salt);
         String saltString = new String(salt, StandardCharsets.UTF_8);
         User user = new User(login, PasswordHasher.encryptStringSHA(pepper+password+saltString), saltString);

@@ -2,6 +2,7 @@ package application.controller;
 
 import application.configuration.jwt.JwtProvider;
 import application.domain.User;
+import application.pojo.AuthResponse;
 import application.pojo.UserRequest;
 import application.service.UserService;
 import lombok.extern.java.Log;
@@ -34,10 +35,10 @@ public class AuthenticationController {
         if (user != null) {
             String token = jwtProvider.generateToken(user.getUsername());
             return ResponseEntity.ok(token);
-        } else return new ResponseEntity<>("Неправильный логин и/или пароль", HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>("Неверный логин и/или пароль", HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(name="/auth",
+    @PutMapping(value="/auth",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     private ResponseEntity<String> register(@RequestBody UserRequest userRequest) {

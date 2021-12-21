@@ -13,7 +13,8 @@ const routes = [
         name: 'default-page',
         component: Login,
         beforeEnter: (to, from, next) => {
-            (localStorage.getItem("jwt") !== null) ? next({name: 'main'}) : next({name: 'auth-page'});
+            if (localStorage.getItem("jwt") !== null) next({name: 'main'});
+            else next({name: 'auth-page'});
         }
     },
     {
@@ -23,7 +24,7 @@ const routes = [
         beforeEnter: (to, from, next) => {
             if (localStorage.getItem("jwt")) next();
             else next({
-                name: 'auth-page',
+                name: 'error-page-app',
             });
         }
     },
@@ -51,7 +52,18 @@ const routes = [
             errorCode: "401",
             errorMsg: "Для доступа к приложению требуется авторизация."
         }
-    }
+    },
+    {
+        path: '/expired',
+        name: 'error-page-expired',
+        component: NotFound,
+        props: {
+            default: true,
+            errorCode: "401",
+            errorMsg: "Ваша сессия закончилась. Повторите вход в систему."
+        }
+    },
+
 
 
 ]

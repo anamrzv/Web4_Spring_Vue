@@ -9,4 +9,5 @@ public class PointRequest {
     private String x;
     private String y;
     private String r;
+    private String ttl;
 }

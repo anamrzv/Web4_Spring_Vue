@@ -1,18 +1,16 @@
 <template>
-  <table id="body-table">
+  <div id="body-table">
 
-    <tr>
-      <th class="header">
-        <div>
-          <p>Морозова Анастасия Александровна P3230</p>
-          <p>Вариант 5547</p>
-        </div>
-      </th>
-    </tr>
+    <div class="header">
+      <div>
+        <p>Морозова Анастасия Александровна P3230</p>
+        <p>Вариант 5547</p>
+      </div>
+    </div>
 
-    <tr class="body">
-      <th class="choose-area">
-        <div id="graph">
+    <div class="body">
+      <div class="choose-area">
+        <div id="graph-and-ttl">
           <svg id="graph_pic" height="300" width="300" xmlns="http://www.w3.org/2000/svg" @click="addPointFromGraph">
 
             <line stroke="black" x1="0" y1="150" x2="300" y2="150"/>
@@ -47,21 +45,29 @@
             <text fill="black" x="285" y="140">X</text>
             <text fill="black" x="160" y="15">Y</text>
 
-            <polygon id="rectangle" fill="black"
-                     fill-opacity="0.3"
+            <polygon id="rectangle" fill="#5043C7"
+                     fill-opacity="0.6"
                      stroke="black"
                      points="50,150 150,150 150,200 50,200"/>
 
-            <path id="circle" fill="black"
-                  fill-opacity="0.3"
+            <path id="circle" fill="#5043C7"
+                  fill-opacity="0.6"
                   stroke="black"
                   d="M 150 200 A 50 50, 90, 0, 0, 200 150 L 150 150"/>
 
-            <polygon id="triangle" fill="black"
-                     fill-opacity="0.3"
+            <polygon id="triangle" fill="#5043C7"
+                     fill-opacity="0.6"
                      stroke="black"
                      points="50,150 150,150 150,50"/>
           </svg>
+
+          <div id="ttl">
+            <label for="ttlInput">Введите время (в формате чч:мм), по истечении которго запись
+              должна удалиться.(По умолчанию значение равно 10 минут.)</label>
+            <div>
+              <input id="ttlInput" type="time" name="ttl" placeholder="" value="00:10" required="false">
+            </div>
+          </div>
         </div>
 
         <form id="hidden-form" style="display: none">
@@ -104,7 +110,7 @@
 
               <p>Выберите Y:</p>
               <div>
-                <input id="yField" type="text" name="y" required="" placeholder="Число в интервале (-5;5)">
+                <input id="yField" type="text" name="y" required="" placeholder="(-5;5)">
               </div>
 
               <p>Выберите R:</p>
@@ -138,42 +144,43 @@
           </form>
         </div>
 
-      </th>
-    </tr>
+      </div>
+    </div>
 
-    <tr>
-      <th>
-        <div>
-          <button type="button" class="gradient-button">На главную</button>
-          <button type="button" class="gradient-button" @click="deletePoints">Удалить все точки</button>
-        </div>
-        <div class="table-area">
-          <table id="main-table">
-            <caption>ИСТОРИЯ ВЫПОЛНЕНИЙ</caption>
-            <thead>
-            <tr>
-              <th class="col">X</th>
-              <th class="col">Y</th>
-              <th class="col">R</th>
-              <th class="col">Текущее время</th>
-              <th class="col">Результат</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="point in points" v-bind:key="point.id">
-              <td>{{ point.x }}</td>
-              <td>{{ point.y }}</td>
-              <td>{{ point.r }}</td>
-              <td>{{ point.time }}</td>
-              <td>{{ point.result }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </th>
-    </tr>
+    <div>
+      <div class="button-row">
+        <button type="button" class="gradient-button" @click="logout">Выход</button>
+        <button type="button" class="gradient-button" @click="deletePoints">Удалить все точки</button>
+        <button type="button" class="gradient-button" @click="download">Скачать файл</button>
+      </div>
+      <div class="table-area">
+        <table id="main-table">
+          <caption>ИСТОРИЯ ВЫПОЛНЕНИЙ</caption>
+          <thead>
+          <tr>
+            <th class="col">X</th>
+            <th class="col">Y</th>
+            <th class="col">R</th>
+            <th class="col">Результат</th>
+            <th class="col">Текущее время</th>
+            <th class="col">Срок жизни</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="point in points" v-bind:key="point.id">
+            <td>{{ point.x }}</td>
+            <td>{{ point.y }}</td>
+            <td>{{ point.r }}</td>
+            <td>{{ point.result }}</td>
+            <td>{{ point.creationString }}</td>
+            <td>{{ point.deathString }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  </table>
+  </div>
 </template>
 
 <script>
@@ -189,6 +196,7 @@ export default {
       xGraph: "",
       yGraph: "",
       points: new Array(0),
+      ttl: "00:10"
     }
   },
 
@@ -209,29 +217,42 @@ export default {
       axios.post('http://localhost:8083/api/points/main', {
         x: document.getElementById('pointX').value,
         y: document.getElementById('yField').value.trim(),
-        r: document.getElementById('pointR').value
+        r: document.getElementById('pointR').value,
+        ttl: document.getElementById('ttlInput').value
+      }, {
+        headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
         this.getPoints();
         this.drawPoints();
       }, () => {
         alert("Точку не удалось добавить");
-      });
+      }).catch(() => {
+        this.$router.push({name: 'error-page-expired'})
+      })
     },
     getPoints() {
-      axios.get('http://localhost:8083/api/points/main')
-          .then((response) => {
-            this.points = response.data;
-            this.drawPoints();
-          });
+      axios.get('http://localhost:8083/api/points/main', {
+        headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
+      }).then((response) => {
+        this.points = response.data;
+        this.drawPoints();
+      }).catch(() => {
+        this.$router.push({name: 'error-page-expired'})
+      })
     },
     deletePoints() {
-      axios.delete('http://localhost:8083/api/points/main')
-          .then(() => {
-            this.getPoints();
-            alert("Точки удалены")
-          }, () => {
-            alert("Не удалось удалить точки")
-          })
+      axios.delete('http://localhost:8083/api/points/main', {
+        headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
+      }).then(() => {
+        this.getPoints();
+      }, () => {
+        alert("Не удалось удалить точки")
+      }).catch(() => {
+        this.$router.push({name: 'error-page-expired'})
+      })
+    },
+    logout() {
+      this.$router.push({name: "auth-page"}, () => localStorage.clear());
     },
 
     drawPoints() {
@@ -270,7 +291,10 @@ export default {
         axios.post('http://localhost:8083/api/points/main', {
           x: this.xGraph,
           y: this.yGraph,
-          r: this.r
+          r: this.r,
+          ttl: document.getElementById('ttlInput').value
+        }, {
+          headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
         }).then(() => {
           this.getPoints();
           this.drawPoints();
@@ -289,15 +313,49 @@ export default {
         };
       }
     },
+    download() {
+      axios.post('http://localhost:8083/api/points/pdf', null, {
+        responseType: 'arraybuffer',
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("jwt"),
+          "Accept": "application/octet-stream",
+          "Content-Type": "application/json"
+        }
+      }).then((response) => {
+        console.log(response)
+        let blob = new Blob([response.data], {type: 'application/octet-stream'})
+        let link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        let now = new Date();
+        link.download = formatDate(now);
+        link.click();
+
+        this.getPoints();
+        this.drawPoints();
+      }).catch(() => {
+        this.$router.push({name: 'error-page-expired'})
+      })
+
+      function formatDate(date) {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let seconds = date.getSeconds();
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        let strTime = hours + '.' + minutes + '.' + seconds;
+        return strTime + "_" + (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear();
+      }
+    },
 
 
     rememberX(value1) {
       document.getElementById('pointX').value = value1;
-    },
+    }
+    ,
     rememberR(value1) {
       document.getElementById('pointR').value = value1;
       this.r = value1;
-    },
+    }
+    ,
     validateInput() {
       let y;
       let yText = document.getElementById("yField");
@@ -309,7 +367,8 @@ export default {
           this.addPoints();
         }
       } else yText.setCustomValidity("Некорректный вид числа");
-    },
+    }
+    ,
 
 
     paintButtons(id) {
@@ -323,7 +382,8 @@ export default {
       }
       document.getElementById(id).classList.toggle("ordinary-btn"); //убрали обычный
       document.getElementById(id).classList.toggle("ordinary-btn-selected"); //добавили нажатый
-    },
+    }
+    ,
     paintButtonsR(id) {
       let selected = document.querySelectorAll(".ordinary-btn-selected-R");
       if (selected !== null) {
@@ -336,10 +396,16 @@ export default {
       document.getElementById(id).classList.toggle("ordinary-btn-R"); //убрали обычный
       document.getElementById(id).classList.toggle("ordinary-btn-selected-R"); //добавили нажатый
     }
-  },
+  }
+  ,
   mounted() {
     this.getPoints();
     this.drawPoints();
   }
 }
 </script>
+
+<style>
+@import "../assets/header.css";
+@import "../assets/body.css";
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="body-table">
+  <div id="login-body">
 
     <div class="header">
       <div>
@@ -57,7 +57,6 @@ export default {
   methods: {
     loging(e) {
       e.preventDefault();
-      this.$router.push({name: 'main'});
       axios.post('http://localhost:8083/api/user/auth', {
         login: this.login,
         password: this.password
@@ -68,15 +67,15 @@ export default {
         document.getElementById("forError").innerText=error.response.data;
       })
     },
-    register() {
-
-    },
-    AxiosErrorHandler(errorText) {
-      this.$notify({
-        group: 'error',
-        title: 'Error',
-        text: errorText,
-        type: 'error'
+    register(e) {
+      e.preventDefault();
+      axios.put('http://localhost:8083/api/user/auth', {
+        login: this.login,
+        password: this.password
+      }).then(() => {
+        document.getElementById("forError").innerText="Вы успешно зарегистрированы";
+      }).catch(error => {
+        document.getElementById("forError").innerText=error.response.data;
       })
     }
   }
@@ -84,7 +83,6 @@ export default {
 </script>
 
 <style>
-@import "../../public/header.css";
-@import "../../public/body.css";
-@import "../../public/login.css";
+@import "../assets/header.css";
+@import "../assets/login.css";
 </style>
