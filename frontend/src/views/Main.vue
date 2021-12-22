@@ -81,6 +81,7 @@
           <form id="coordinates-form">
             <div class="checkbox-area">
               <p>Выберите X:</p>
+              <a id="forXError" style="font-size: 10px; font-style: oblique; color: #4C489D"></a>
               <div id="x-group">
                 <div class="row">
                   <input class="ordinary-btn" id="-5" type="button" value="-5" name="x"
@@ -136,7 +137,7 @@
               </div>
 
               <div class="buttons-area">
-                <button type="submit" id="function-btn" class="gradient-button" @click="validateInput()">
+                <button id="function-btn" type="button" class="gradient-button" @click="validateInput()">
                   Отправить
                 </button>
               </div>
@@ -225,7 +226,11 @@ export default {
         this.getPoints();
         this.drawPoints();
       }, () => {
-        alert("Точку не удалось добавить");
+        this.$swal.fire({
+          icon: "error",
+          text: "Точку не удалось добавить",
+          title: "Упс..."
+        });
       }).catch(() => {
         this.$router.push({name: 'error-page-expired'})
       })
@@ -245,13 +250,27 @@ export default {
         headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
         this.getPoints();
+        this.$swal.fire({
+          icon: "success",
+          text: "Точки удалены!",
+          title: "Ура!"
+        });
       }, () => {
-        alert("Не удалось удалить точки")
+        this.$swal.fire({
+          icon: "error",
+          text: "Не получилось удалить точки",
+          title: "Упс..."
+        });
       }).catch(() => {
         this.$router.push({name: 'error-page-expired'})
       })
     },
     logout() {
+      this.$swal.fire({
+        icon: "success",
+        text: "До встречи!",
+        title: "Вы успено вышли",
+      });
       this.$router.push({name: "auth-page"}, () => localStorage.clear());
     },
 
@@ -299,10 +318,18 @@ export default {
           this.getPoints();
           this.drawPoints();
         }, () => {
-          alert("Точку не удалось добавить");
+          this.$swal.fire({
+            icon: "error",
+            text: "Не получилось добавить точку",
+            title: "Упс..."
+          });
         });
       } else {
-        alert("Проверьте значение R");
+        this.$swal.fire({
+          icon: "error",
+          text: "Вы выбрали неправильный радиус",
+          title: "Упс..."
+        });
       }
 
       function getMousePosition(element, event) {
@@ -364,7 +391,15 @@ export default {
         if (y >= 5 || y <= -5) yText.setCustomValidity("Число вне допустимого диапазона");
         else {
           yText.setCustomValidity("");
-          this.addPoints();
+          if (document.getElementById('pointX').value !== '') {
+            this.addPoints();
+          } else {
+            this.$swal.fire({
+              icon: "error",
+              text: "Вы не выбрали Х",
+              title: "Упс..."
+            });
+          }
         }
       } else yText.setCustomValidity("Некорректный вид числа");
     }
@@ -408,4 +443,5 @@ export default {
 <style>
 @import "../assets/header.css";
 @import "../assets/body.css";
+@import "../assets/adaptive.css";
 </style>

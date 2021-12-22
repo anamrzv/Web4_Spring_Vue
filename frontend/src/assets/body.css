@@ -16,19 +16,25 @@ body {
     flex-direction: row;
     justify-content: space-around;
     padding: 25px;
-    margin: 70px 170px 20px;
+    margin: 50px 100px 20px;
     background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 30px 5px #787099;
     border-radius: 20px;
     align-items: center;
 }
 
-div[class="checkbox-area"] {
-    width: 500px;
+.checkbox-area {
+    margin-right: 10px;
+    margin-left: 10px;
     border-radius: 20px;
     flex-direction: column;
     align-items: center;
     background: #8F87DB;
+    width: auto;
+}
+
+#ttl {
+    width:300px
 }
 
 #graph-and-ttl {
@@ -64,6 +70,7 @@ div[class="checkbox-area"] {
     overflow: hidden;
     width: 600px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin: 10px 10px 30px;
     background: linear-gradient(45deg, #49a09d, #5f2c82);
 }
 
@@ -83,6 +90,11 @@ div[class="checkbox-area"] {
 
 .col {
     background-color: #55608f;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
 }
 
 tbody > tr:hover {
