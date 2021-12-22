@@ -9,13 +9,11 @@ import application.service.PointService;
 import application.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,11 +48,11 @@ public class MainController {
     @PostMapping(value = "/main",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    private ResponseEntity<Point> addNewPoint(@RequestBody PointRequest point, HttpServletRequest req) {
+    private ResponseEntity addNewPoint(@RequestBody PointRequest point, HttpServletRequest req) {
         if (jwtProvider.getTokenFromRequest(req) != null) {
-            float x1 = Float.valueOf(point.getX());
-            float y1 = Float.valueOf(point.getY());
-            float r1 = Float.valueOf(point.getR());
+            float x1 = Float.parseFloat(point.getX());
+            float y1 = Float.parseFloat(point.getY());
+            float r1 = Float.parseFloat(point.getR());
             User user = userService.findByLogin(jwtProvider.getLoginFromToken(jwtProvider.getTokenFromRequest(req)));
             boolean isInFigure = isInTriangle(x1, y1, r1) || isInRectangle(x1, y1, r1) || isInCircle(x1, y1, r1);
             String answer;
@@ -96,8 +94,7 @@ public class MainController {
             String filename = "points.txt";
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-            ResponseEntity<byte[]> response = new ResponseEntity<>(arr, headers, HttpStatus.OK);
-            return response;
+            return new ResponseEntity<>(arr, headers, HttpStatus.OK);
         } else return new ResponseEntity("Ваша сессия закончилась. Требуется войти в систему.", HttpStatus.BAD_GATEWAY);
     }
 

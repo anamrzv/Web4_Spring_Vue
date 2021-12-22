@@ -19,39 +19,27 @@ public class UserService {
     private static final Random RANDOM = new SecureRandom();
 
     @Transactional
-    public User saveUser(String login, String password){
+    public User saveUser(String login, String password) {
         byte[] salt = new byte[6];
         RANDOM.nextBytes(salt);
         String saltString = new String(salt, StandardCharsets.UTF_8);
-        User user = new User(login, PasswordHasher.encryptStringSHA(pepper+password+saltString), saltString);
+        User user = new User(login, PasswordHasher.encryptStringSHA(pepper + password + saltString), saltString);
         return userRepository.save(user);
     }
 
     @Transactional
-    public User findByLogin(String login){
+    public User findByLogin(String login) {
         return userRepository.getByUsername(login);
     }
 
     @Transactional
-    public User findByLoginAndPassword(String login, String password){
+    public User findByLoginAndPassword(String login, String password) {
         User user = userRepository.getByUsername(login);
-        if (user!=null) {
+        if (user != null) {
             String saltString = user.getSalt();
             String toBeCheckedPassword = PasswordHasher.encryptStringSHA(pepper + password + saltString);
             return userRepository.getByUsernameAndPassword(login, toBeCheckedPassword);
         }
         return null;
     }
-
-    @Transactional
-    public boolean deleteByUser(User user){
-        try{
-            userRepository.delete(user);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
-
 }

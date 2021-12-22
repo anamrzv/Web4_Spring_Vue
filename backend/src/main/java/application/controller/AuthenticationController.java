@@ -4,7 +4,6 @@ import application.configuration.jwt.JwtProvider;
 import application.domain.User;
 import application.pojo.UserRequest;
 import application.service.UserService;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +20,7 @@ public class AuthenticationController {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @PostMapping(value="/auth",
+    @PostMapping(value = "/auth",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     private ResponseEntity<String> auth(@RequestBody UserRequest userRequest) {
@@ -32,12 +31,12 @@ public class AuthenticationController {
         } else return new ResponseEntity<>("Неверный логин и/или пароль", HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value="/auth",
+    @PutMapping(value = "/auth",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     private ResponseEntity<String> register(@RequestBody UserRequest userRequest) {
         User user = userService.findByLogin(userRequest.getLogin());
-        if (user==null) {
+        if (user == null) {
             userService.saveUser(userRequest.getLogin(), userRequest.getPassword());
             return ResponseEntity.ok("Вы успешно зарегистрированы");
         } else return new ResponseEntity<>("Логин уже существует", HttpStatus.BAD_REQUEST);

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class FallbackController {
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.OPTIONS}, path = {"/api/points", "/api/points/main"})
-    public String forwardPaths(){
+    public String forwardPaths() {
         return "forward:/index.html";
     }
 }

@@ -4,7 +4,6 @@ import application.domain.Point;
 import application.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,25 +15,19 @@ public class PointService {
     private PointRepository pointRepository;
 
     @Transactional
-    public Point savePointByUser(String login, Point point){
-        point.setUser(login);
-        return pointRepository.save(point);
-    }
-
-    @Transactional
-    public List<Point> findAllByUser(String login){
+    public List<Point> findAllByUser(String login) {
         return pointRepository.getAllByUser(login);
     }
 
     @Transactional
     @Modifying
-    public void deleteAllByUser(String login){
+    public void deleteAllByUser(String login) {
         pointRepository.deleteAllByUser(login);
     }
 
     @Transactional
     @Modifying
-    public void deleteDeadRows(){
+    public void deleteDeadRows() {
         pointRepository.deleteAllDeadRows();
     }
 }

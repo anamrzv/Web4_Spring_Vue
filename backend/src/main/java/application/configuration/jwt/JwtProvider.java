@@ -1,6 +1,5 @@
 package application.configuration.jwt;
 
-import application.configuration.CustomUserDetails;
 import application.configuration.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

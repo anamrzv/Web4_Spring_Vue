@@ -64,7 +64,7 @@ export default {
         localStorage.setItem("jwt", response.data);
         this.$router.push({name: 'main'});
       }).catch(error => {
-        document.getElementById("forError").innerText=error.response.data;
+        document.getElementById("forError").innerText = error.response.data;
       })
     },
     register(e) {
@@ -73,9 +73,9 @@ export default {
         login: this.login,
         password: this.password
       }).then(() => {
-        document.getElementById("forError").innerText="Вы успешно зарегистрированы";
+        document.getElementById("forError").innerText = "Вы успешно зарегистрированы";
       }).catch(error => {
-        document.getElementById("forError").innerText=error.response.data;
+        document.getElementById("forError").innerText = error.response.data;
       })
     }
   }

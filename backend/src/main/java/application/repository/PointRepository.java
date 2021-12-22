@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface PointRepository extends JpaRepository<Point,Integer> {
+public interface PointRepository extends JpaRepository<Point, Integer> {
     List<Point> getAllByUser(String user);
+
     void deleteAllByUser(String user);
 
     @Transactional

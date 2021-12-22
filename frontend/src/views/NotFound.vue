@@ -9,8 +9,8 @@
     </div>
 
     <div class="errors">
-      <h1>Ошибка {{errorCode}}:</h1>
-      <h2>{{errorMsg}}</h2>
+      <h1>Ошибка {{ errorCode }}:</h1>
+      <h2>{{ errorMsg }}</h2>
       <button class="gradient-button" @click="goHome">
         Войти
       </button>
@@ -23,7 +23,7 @@
 @import "../assets/header.css";
 @import "../assets/body.css";
 
-.errors{
+.errors {
   color: #000000;
   text-align: center;
   margin-top: 200px;
@@ -38,8 +38,8 @@ export default {
     errorMsg: String
   },
   methods: {
-    goHome(){
-      this.$router.push({name:"auth-page"})
+    goHome() {
+      this.$router.push({name: "auth-page"})
     }
   }
 }
