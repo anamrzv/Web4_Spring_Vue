@@ -131,7 +131,7 @@
                          @click="rememberR(1); paintButtonsR('r1')">
                   <input class="ordinary-btn-R" id="r2" type="button" value="2" name="r"
                          @click="rememberR(2); paintButtonsR('r2')">
-                  <input class="ordinary-btn-R" id="r3" type="button" value="3" name="r"
+                  <input class="ordinary-btn-selected-R" id="r3" type="button" value="3" name="r"
                          @click="rememberR(3); ; paintButtonsR('r3')">
                 </div>
               </div>
@@ -218,7 +218,7 @@ export default {
       axios.post('http://localhost:8083/api/points/main', {
         x: document.getElementById('pointX').value,
         y: document.getElementById('yField').value.trim(),
-        r: document.getElementById('pointR').value,
+        r: this.r,
         ttl: document.getElementById('ttlInput').value
       }, {
         headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
@@ -401,7 +401,13 @@ export default {
             });
           }
         }
-      } else yText.setCustomValidity("Некорректный вид числа");
+      } else {
+        this.$swal.fire({
+          icon: "error",
+          text: "Вы не выбрали Y",
+          title: "Упс..."
+        });
+      }
     }
     ,
 
