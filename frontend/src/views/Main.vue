@@ -354,7 +354,7 @@ export default {
         let link = document.createElement('a')
         link.href = window.URL.createObjectURL(blob)
         let now = new Date();
-        link.download = formatDate(now);
+        link.download = formatDate(now)+".txt";
         link.click();
 
         this.getPoints();

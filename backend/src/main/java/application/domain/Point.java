@@ -30,8 +30,10 @@ public class Point {
     @Column(name = "ttl")
     private LocalTime ttl;
     @Column(name = "creation")
+    @JsonIgnore
     private LocalDateTime creation;
     @Column(name = "death")
+    @JsonIgnore
     private LocalDateTime death;
     @Column(name = "creation_string")
     private String creationString;
